@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaliSahaRandevu", "HaliSaha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityLayer", "EntityLayer\EntityLayer.csproj", "{E205E59C-57E8-45EF-A1FE-873BEDCF7221}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{496A0169-01FD-453F-AF26-A19F27FCE75B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{EA667E1C-7C90-421F-86B4-6E59D2C4F656}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,14 @@ Global
 		{E205E59C-57E8-45EF-A1FE-873BEDCF7221}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E205E59C-57E8-45EF-A1FE-873BEDCF7221}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E205E59C-57E8-45EF-A1FE-873BEDCF7221}.Release|Any CPU.Build.0 = Release|Any CPU
+		{496A0169-01FD-453F-AF26-A19F27FCE75B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{496A0169-01FD-453F-AF26-A19F27FCE75B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{496A0169-01FD-453F-AF26-A19F27FCE75B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{496A0169-01FD-453F-AF26-A19F27FCE75B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA667E1C-7C90-421F-86B4-6E59D2C4F656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA667E1C-7C90-421F-86B4-6E59D2C4F656}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA667E1C-7C90-421F-86B4-6E59D2C4F656}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA667E1C-7C90-421F-86B4-6E59D2C4F656}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

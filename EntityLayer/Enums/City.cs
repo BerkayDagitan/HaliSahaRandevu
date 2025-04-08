@@ -1,6 +1,6 @@
 ﻿namespace EntityLayer.Enums
 {
-    public enum Citys
+    public enum City
     {
         Istanbul = 1,
         Ankara,
