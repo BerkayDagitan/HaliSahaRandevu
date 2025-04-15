@@ -6,6 +6,11 @@ namespace DataAccessLayer.Context
 {
     public class ProjectContext : DbContext
     {
+        public ProjectContext(DbContextOptions<ProjectContext> options)
+        : base(options)
+        {
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Pitch> Pitches { get; set; }

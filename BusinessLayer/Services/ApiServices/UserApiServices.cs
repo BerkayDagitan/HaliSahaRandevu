@@ -1,36 +1,63 @@
 ﻿using BusinessLayer.Interfaces;
 using EntityLayer.DTOs;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http.Json;
 
 namespace BusinessLayer.Services.ApiServices
 {
     public class UserApiServices : IUserApiServices
     {
         private readonly HttpClient _httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserApiServices(HttpClient httpClient)
+        public UserApiServices(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public Task<bool> DeleteUserAccountAsync(string username)
+        public async Task<UserLoginDTO> LoginUserAsync(string username, string password)
         {
-            throw new NotImplementedException();
+            var loginInfo = new
+            {
+                Username = username,
+                Password = password
+            };
+
+            var result = await _httpClient.PostAsJsonAsync("User/Login", loginInfo);
+            if (result.IsSuccessStatusCode)
+            {
+                var resultString = await result.Content.ReadAsStringAsync();
+
+                if (!string.IsNullOrEmpty(resultString))
+                {
+                    var user = JsonConvert.DeserializeObject<UserLoginDTO>(resultString);
+                    if (user != null && user.UserName == username && user.Password == password)
+                    {
+                        return user;
+                    }
+                    else
+                    {
+                        throw new Exception("Kullanıcı bulunamadı.");
+                    }
+                }
+            }
+            return null;
         }
 
-        public Task<bool> LoginUserAsync(string username, string password)
+        public async Task<bool> LogoutUserAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> LogoutUserAsync()
-        {
-            throw new NotImplementedException();
+            try
+            {
+                await _httpContextAccessor.HttpContext.SignOutAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task<bool> RegisterUserAsync(RegisterUserDTO dto)
@@ -42,11 +69,6 @@ namespace BusinessLayer.Services.ApiServices
             if (result.IsSuccessStatusCode is true)
                 return result.Content.ReadAsStringAsync().Result == "Üye oluşturuldu." ? true : false;
             return false;
-        }
-
-        public Task<bool> UpdateUserProfileAsync(string username, string newPassword)
-        {
-            throw new NotImplementedException();
         }
     }
 }
