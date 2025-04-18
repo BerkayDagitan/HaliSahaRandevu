@@ -1,0 +1,44 @@
+﻿
+@model UserLoginDTO
+@if (TempData["Error"] != null)
+{
+    <p style="color:red">@TempData["Error"]</p>
+}
+<header>
+    <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3">
+        <div class="container d-flex justify-content-end">
+            <a class="navbar-brand text-white fw-bold text-center" asp-area="" asp-controller="GirisEkrani" asp-action="GirisYap"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-flex justify-content-center">
+                <ul class="navbar-nav d-flex justify-content-center w-100">
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-lg" style="width: 350px;">
+        <h3 class="text-center mb-4">Giriş Yap</h3>
+
+        <form asp-action="Login" asp-controller="LoginPage" method="post" style="color:gray">
+            <div class="form-group mb-3">
+                <label asp-for="UserName" class="form-label">Kullanıcı Adı</label>
+                <input asp-for="UserName" class="form-control" placeholder="Kullanıcı adınızı girin" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Password" class="form-label">Şifre</label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Şifrenizi girin" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+        </form>
+        <br />
+        <a asp-action="Register" asp-controller="LoginPage" class="btn btn-success w-100">Kayıt Ol</a>
+    </div>
+</div>

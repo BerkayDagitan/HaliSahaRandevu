@@ -33,5 +33,10 @@ namespace WebAPI.Controllers
             _db.Appointments.AddAsync(appointment);
             return _db.SaveChanges() > 0 ? Ok("Randevu oluşturuldu.") : BadRequest("Randevu oluşturulamadı.");
         }
+
+        [HttpGet("List")]
+        public IActionResult ListAppointment()
+        {
+            return Ok(_db.Appointments.ToList());        }
     }
 }
