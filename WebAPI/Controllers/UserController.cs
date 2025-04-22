@@ -36,15 +36,18 @@ namespace WebAPI.Controllers
         [HttpPost("Login")]
         public IActionResult PostLogin([FromBody] UserLoginDTO dto)
         {
-            var user = _db.Users.FirstOrDefault(x => x.UserName == dto.UserName && x.Password == dto.Password);
-            if (user != null)
+            if (dto == null)
             {
-                return Ok(user);
+                return BadRequest("Kullanıcı adı veya şifre boş olamaz.");
             }
-            else
+
+            var user = _db.Users.Where(x => x.UserName.ToLower() == dto.UserName.ToLower() && x.Password == dto.Password).FirstOrDefault();
+
+            if (user == null)
             {
-                return BadRequest("Kullanıcı adı veya şifre hatalı.");
+                return NotFound("Kullanıcı bulunamadı.");
             }
+            return Ok(user);
         }
     }
 }
