@@ -9,7 +9,7 @@ namespace WebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
-    {
+    {   
         private readonly ProjectContext _db;
         private readonly IUserApiServices _services;
 

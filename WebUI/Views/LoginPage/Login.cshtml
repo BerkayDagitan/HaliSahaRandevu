@@ -5,6 +5,10 @@
     <p style="color:red">@TempData["Error"]</p>
 }
 
+<div>
+    <h3>Halı Saha Randevu Sistemine Hoş Geldiniz</h3>
+</div>
+
 <header>
     <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3" style="background-color: transparent;">
         <div class="container d-flex justify-content-end">
@@ -36,11 +40,12 @@
                 <span id="passwordError" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+            <button type="submit" class="btn btn-login w-100">Giriş Yap</button>
         </form>
 
-        <br />
-        <a asp-action="Register" asp-controller="LoginPage" class="btn w-100 gradient-register-btn">🚀 Kayıt Ol</a>
+        <div class="divider">veya</div>
+
+        <a asp-action="Register" asp-controller="LoginPage" class="btn btn-register w-100">🚀 Kayıt Ol</a>
     </div>
 </div>
 
@@ -49,7 +54,7 @@
         height: 100%;
         margin: 0;
         background-color: #f3f4f6;
-        font-family: Arial, sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .full-page-center {
@@ -61,8 +66,8 @@
 
     .card {
         border-radius: 12px;
-        width: 380px;
-        padding: 30px;
+        width: 400px;
+        padding: 40px;
         background-color: #fff;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -82,7 +87,8 @@
         text-align: center;
         margin-bottom: 30px;
         font-size: 24px;
-        color: #007bff;
+        color: #2b2d42;
+        font-weight: 600;
     }
 
     .form-control {
@@ -94,28 +100,75 @@
     }
 
         .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+            border-color: #4361ee;
+            box-shadow: 0 0 8px rgba(67, 97, 238, 0.2);
         }
 
     .text-danger {
         font-size: 14px;
     }
 
-    .gradient-register-btn {
-        background-color: white;
-        border: 1px solid #007bff;
-        color: #007bff;
+    /* Giriş Yap Butonu */
+    .btn-login {
+        background-color: #4361ee;
+        color: white;
         font-weight: 600;
-        padding: 10px;
-        transition: all 0.3s ease;
+        padding: 14px;
+        border: none;
         border-radius: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+        box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
     }
 
-        .gradient-register-btn:hover {
-            background-color: #007bff;
-            color: white;
-            transform: scale(1.05);
+        .btn-login:hover {
+            background-color: #3a56d4;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
+        }
+
+    /* Kayıt Ol Butonu */
+    .btn-register {
+        background-color: white;
+        border: 2px solid #4361ee;
+        color: #4361ee;
+        font-weight: 600;
+        padding: 14px;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        font-size: 16px;
+        margin-top: 15px;
+    }
+
+        .btn-register:hover {
+            background-color: #f0f2ff;
+            transform: translateY(-2px);
+        }
+
+    /* Ayırıcı */
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 20px 0;
+        color: #8d99ae;
+        font-size: 14px;
+    }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .divider::before {
+            margin-right: 10px;
+        }
+
+        .divider::after {
+            margin-left: 10px;
         }
 
     .input-group {
@@ -126,10 +179,11 @@
         padding: 12px;
         border: 1px solid #ced4da;
         transition: border-color 0.3s ease;
+        margin-bottom: 5px;
     }
 
         .input-group:hover {
-            border-color: #007bff;
+            border-color: #4361ee;
         }
 
         .input-group i {
@@ -144,5 +198,4 @@
             width: 100%;
             font-size: 1rem;
         }
-
 </style>

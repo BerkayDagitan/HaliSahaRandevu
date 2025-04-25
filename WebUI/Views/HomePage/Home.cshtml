@@ -1,113 +1,131 @@
-﻿@{
-    Layout = "_Layout";
+﻿@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery Antiforgery
+@{
+    var token = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
+<input type="hidden" id="__RequestVerificationToken" value="@token" />
 
 <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <nav class="navbar">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">💼 Ana Sayfa</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Randevularım</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Randevu Al</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-danger" href="#">Çıkış Yap</a>
-                    </li>
+            <a class="navbar-brand" href="#">Halı Saha Randevu Sistemi</a>
+            <div class="navbar-menu">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#">Randevularım</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Randevu Al</a></li>
+                    <li class="nav-item"><a class="nav-link logout" href="#">Çıkış Yap</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
 
-<main class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg border-0 rounded-3 p-4">
-                <h2 class="text-center mb-4 text-primary">Hoşgeldiniz</h2>
-                <p class="text-center mb-4">Ana sayfanızda işlemlerinize devam edebilir veya yeni randevular alabilirsiniz.</p>
-                <div class="d-flex justify-content-center">
-                    <button class="btn btn-outline-primary btn-lg mx-2 w-45">Randevularım</button>
-                    <button class="btn btn-outline-success btn-lg mx-2 w-45">Randevu Al</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
 <style>
-    body {
-        background-color: #f9f9f9;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    :root {
+        --primary: #4361ee;
+        --primary-light: #e6f0ff;
+        --text: #2b2d42;
+        --text-light: #8d99ae;
+        --white: #ffffff;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        --transition: all 0.3s ease;
     }
 
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: var(--text);
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Navbar */
     .navbar {
-        border-bottom: 1px solid #e0e0e0;
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        background: var(--white);
     }
 
     .navbar-brand {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         font-weight: 700;
-        color: #007bff;
+        color: var(--primary);
+        text-decoration: none;
     }
 
-    .navbar-nav .nav-link {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #333;
+    .navbar-menu {
+        display: flex;
+        align-items: center;
     }
 
-        .navbar-nav .nav-link:hover {
-            color: #007bff;
+    .navbar-nav {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        margin-left: auto;
+    }
+
+    .nav-item {
+        margin-left: 30px;
+    }
+
+    .nav-link {
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+        position: relative;
+        padding: 5px 0;
+    }
+
+        .nav-link:hover {
+            color: var(--primary);
         }
 
-    .card {
-        background-color: #ffffff;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        .nav-link.logout {
+            color: #e63946;
         }
 
-    .text-primary {
-        color: #007bff !important;
-    }
-
-    .btn-outline-primary, .btn-outline-success {
-        font-weight: 600;
-        padding: 15px 25px;
-        border-radius: 8px;
-        font-size: 1.1rem;
-        transition: all 0.3s ease;
-        border-width: 2px;
-    }
-
-        .btn-outline-primary:hover, .btn-outline-success:hover {
-            transform: scale(1.05);
-        }
-
-    .text-center {
-        text-align: center;
-    }
-
-    .text-danger {
-        color: red;
-    }
+            .nav-link.logout:hover {
+                color: #c1121f;
+            }
 </style>
 
 <script>
-    document.querySelector('.text-danger').addEventListener('click', function() {
-        alert('Çıkış yapıldı!');
-           window.location.href = '@Url.Action("Login", "LoginPage")';
+    document.addEventListener('DOMContentLoaded', function() {
+        const logoutBtn = document.querySelector('.logout');
+
+        logoutBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+
+            try {
+                const response = await fetch('/HomePage/Logout', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.getElementById('__RequestVerificationToken').value
+                    },
+                    credentials: 'include'
+                });
+
+                if(response.ok) {
+                    alert('Başarıyla çıkış yapıldı');
+                    window.location.href = '@Url.Action("Login", "LoginPage")';
+                } else {
+                    alert('Çıkış işlemi başarısız oldu: ' + response.statusText);
+                }
+            } catch(error) {
+                console.error('Çıkış hatası:', error);
+                alert('Bir hata oluştu, lütfen tekrar deneyin: ' + error.message);
+            }
+        });
     });
 </script>
