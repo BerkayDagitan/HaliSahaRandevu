@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
             _db = context;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public IActionResult PostRegister([FromBody] RegisterUserDTO dto)
         {
             User user = new User()
@@ -33,8 +33,8 @@ namespace WebAPI.Controllers
             return _db.SaveChanges() > 0 ? Ok("Kayıt Başarılı") : BadRequest("Kayıt Başarısız");
         }
 
-        [HttpPost("Login")]
-        public IActionResult PostLogin([FromBody] UserLoginDTO dto)
+        [HttpPost("login")]
+        public async Task<IActionResult> PostLogin([FromBody] UserLoginDTO dto)
         {
             if (dto == null)
             {
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
 
             if (user == null)
             {
-                return NotFound("Kullanıcı bulunamadı.");
+                return NotFound("Kullanıcı adı veya şifreniz hatalı. Tekrar deneyiniz.");
             }
             return Ok(user);
         }

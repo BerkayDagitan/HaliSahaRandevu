@@ -14,6 +14,11 @@ namespace BusinessLayer.Services.ApiServices
 
         public UserApiServices(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
+            if (httpClient.BaseAddress == null)
+            {
+                httpClient.BaseAddress = new Uri("http://localhost:5138/api/");
+                Console.WriteLine("set edildi: " + httpClient.BaseAddress);
+            }
             _httpClient = httpClient;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -22,11 +27,11 @@ namespace BusinessLayer.Services.ApiServices
         {
             var loginInfo = new
             {
-                Username = username,
+                UserName = username,
                 Password = password
             };
 
-            var result = await _httpClient.PostAsJsonAsync("User/Login", loginInfo);
+            var result = await _httpClient.PostAsJsonAsync("User/login", loginInfo);
             if (result.IsSuccessStatusCode)
             {
                 var resultString = await result.Content.ReadAsStringAsync();
@@ -64,7 +69,7 @@ namespace BusinessLayer.Services.ApiServices
         {
             StringContent content = new StringContent(JsonConvert.SerializeObject(dto));
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-            var result = await _httpClient.PostAsync("User/Register", content);
+            var result = await _httpClient.PostAsync("User/register", content);
 
             if (result.IsSuccessStatusCode is true)
                 return result.Content.ReadAsStringAsync().Result == "Üye oluşturuldu." ? true : false;

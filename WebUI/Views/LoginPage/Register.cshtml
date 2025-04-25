@@ -1,27 +1,46 @@
-﻿@model UserLoginDTO
+﻿@model RegisterUserDTO
 
-@if (TempData["Error"] != null)
+@if (TempData["SuccessRegister"] != null)
 {
-    <p style="color:red">@TempData["Error"]</p>
+    <div class="alert alert-success">
+        @TempData["SuccessRegister"]
+    </div>
 }
 
-<header>
-    <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3" style="background-color: transparent;">
-        <div class="container d-flex justify-content-end">
-            <a class="navbar-brand text-white fw-bold text-center" asp-area="" asp-controller="GirisEkrani" asp-action="GirisYap"></a>
-        </div>
-    </nav>
-</header>
+@if (TempData["ErrorRegister"] != null)
+{
+    <p style="color:red">@TempData["ErrorRegister"]</p>
+}
+
+<h1 class="text-center">Kayıt olmak için aşağıdaki bilgileri doldurunuz.</h1>
 
 <div class="container full-page-center">
     <div class="card fade-in">
-        <h3>🔐 Giriş Yap</h3>
+        <h3>🎉 Kayıt Ol</h3>
 
-        <form asp-action="Login" asp-controller="LoginPage" method="post" id="loginForm" style="color:gray">
+        <form asp-action="Register" asp-controller="LoginPage" method="post" novalidate>
             <div class="form-group mb-3">
-                <label for="UserName" class="form-label">Kullanıcı Adı</label>
+                <label for="FirstName" class="form-label">Adınız</label>
                 <div class="input-group">
                     <i class="bi bi-person-fill"></i>
+                    <input id="FirstName" name="FirstName" class="form-control" placeholder="Adınızı girin" />
+                </div>
+                <span id="firstNameError" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="LastName" class="form-label">Soyadınız</label>
+                <div class="input-group">
+                    <i class="bi bi-person-fill"></i>
+                    <input id="LastName" name="LastName" class="form-control" placeholder="Soyadınızı girin" />
+                </div>
+                <span id="lastNameError" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="UserName" class="form-label">Kullanıcı Adınız</label>
+                <div class="input-group">
+                    <i class="bi bi-person-circle"></i>
                     <input id="UserName" name="UserName" class="form-control" placeholder="Kullanıcı adınızı girin" />
                 </div>
                 <span id="userNameError" class="text-danger"></span>
@@ -36,11 +55,11 @@
                 <span id="passwordError" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+            <button type="submit" class="btn btn-success w-100">Kayıt Ol</button>
         </form>
 
         <br />
-        <a asp-action="Register" asp-controller="LoginPage" class="btn w-100 gradient-register-btn">🚀 Kayıt Ol</a>
+        <a asp-action="Login" asp-controller="LoginPage" class="btn btn-primary w-100">Zaten hesabınız var mı? Giriş yapın</a>
     </div>
 </div>
 
@@ -102,19 +121,32 @@
         font-size: 14px;
     }
 
-    .gradient-register-btn {
-        background-color: white;
-        border: 1px solid #007bff;
-        color: #007bff;
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        color: white;
         font-weight: 600;
         padding: 10px;
         transition: all 0.3s ease;
         border-radius: 8px;
     }
 
-        .gradient-register-btn:hover {
-            background-color: #007bff;
-            color: white;
+        .btn-success:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        font-weight: 600;
+        padding: 10px;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
             transform: scale(1.05);
         }
 
@@ -144,5 +176,4 @@
             width: 100%;
             font-size: 1rem;
         }
-
 </style>

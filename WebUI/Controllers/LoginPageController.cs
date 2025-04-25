@@ -29,7 +29,7 @@ namespace WebUI.Controllers
                 TempData["Error"] = "Kullanıcı adı veya şifre hatalı!";
                 return View();
             }
-            return RedirectToAction();
+            return RedirectToAction("Home","HomePage");
         }
 
         [HttpGet]
@@ -46,12 +46,12 @@ namespace WebUI.Controllers
                 var result = await _service.RegisterUserAsync(dto);
                 if (result)
                 {
-                    TempData["Success"] = "Kayıt başarılı!";
+                    TempData["SuccessRegister"] = "Kayıt başarılı!";
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    TempData["Error"] = "Kayıt başarısız!";
+                    TempData["ErrorRegister"] = "Kayıt başarısız!";
                 }
             }
             return View(dto);
