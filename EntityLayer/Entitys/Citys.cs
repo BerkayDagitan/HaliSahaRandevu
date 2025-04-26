@@ -1,10 +1,8 @@
 ﻿namespace EntityLayer.Entitys
 {
-    public class Pitch
+    public class Citys
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int CityId { get; set; }
-        public Citys Citys { get; set; }
     }
 }

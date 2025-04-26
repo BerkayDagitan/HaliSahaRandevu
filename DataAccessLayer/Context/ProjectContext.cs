@@ -1,5 +1,4 @@
 ﻿using EntityLayer.Entitys;
-using EntityLayer.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Context
@@ -14,6 +13,7 @@ namespace DataAccessLayer.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Pitch> Pitches { get; set; }
+        public DbSet<Citys> Citys { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
