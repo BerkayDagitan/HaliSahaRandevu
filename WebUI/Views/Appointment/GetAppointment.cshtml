@@ -1,4 +1,62 @@
 ﻿@model AppointmentDTO
 
+@{
+    ViewData["Title"] = "Randevu Al";
+}
 
+<h2>@ViewData["Title"]</h2>
 
+<form asp-action="GetAppointment" method="post">
+    <!-- Şehir Seçimi -->
+    <div class="form-group">
+        <label for="CityId">Şehir Seçiniz</label>
+        <select id="CityId" name="CityId" class="form-control">
+            <option value="">Şehir Seçiniz</option>
+            @foreach (var city in ViewBag.Cities)
+            {
+                <option value="@city.Id">@city.Name</option>
+            }
+        </select>
+    </div>
+
+    <!-- Saha Seçimi -->
+    <div class="form-group">
+        <label for="FieldId">Saha Seçiniz</label>
+        <select id="FieldId" name="FieldId" class="form-control">
+            <option value="">Önce Şehir Seçiniz</option>
+        </select>
+    </div>
+
+    <!-- Tarih Seçimi -->
+    <div class="form-group">
+        <label for="Date">Tarih Seçiniz</label>
+        <input type="datetime-local" id="Date" name="Date" class="form-control" required />
+    </div>
+
+    <!-- Submit Butonu -->
+    <button type="submit" class="btn btn-primary">Randevu Al</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById('CityId').addEventListener('change', async function() {
+            const cityId = this.value;  // Seçilen şehir id'sini alıyoruz
+            if (cityId) {
+                // Eğer şehir seçildiyse, sahaları almak için API'ye istek gönderiyoruz
+                try {
+                    const response = await fetch(`/Appointment/GetFieldsByCity/${cityId}`);
+                    const fields = await response.json();  // JSON olarak sahaları alıyoruz
+
+                    // Sahalar dropdown'ını güncelliyoruz
+                    const fieldSelect = document.getElementById('FieldId');
+                    fieldSelect.innerHTML = '<option value="">Saha Seçiniz</option>';  // Varsayılan seçenek ekliyoruz
+
+                    fields.forEach(field => {
+                        const option = document.createElement('option');
+                        option.value = field.id;  // Sahanın id'sini value olarak ekliyoruz
+                        option.text = field.name;  // Sahanın adını text olarak ekliyoruz
+                        fieldSelect.appendChild(option);  // Sahayı dropdown'a ekliyoruz
+                    });
+                } catch (error) {
+                    console.error('Sahalar alınırken bir hata oluştu:', error);
+                    alert('Sahalar alınırken bir hata oluştu. L

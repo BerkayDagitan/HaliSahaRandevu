@@ -5,10 +5,7 @@ namespace DataAccessLayer.Context
 {
     public class ProjectContext : DbContext
     {
-        public ProjectContext(DbContextOptions<ProjectContext> options)
-        : base(options)
-        {
-        }
+        public ProjectContext(DbContextOptions<ProjectContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
@@ -23,7 +20,24 @@ namespace DataAccessLayer.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.City)
+                .WithMany()
+                .HasForeignKey(a => a.CitysId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Pitch)
+                .WithMany()
+                .HasForeignKey(a => a.PitchId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

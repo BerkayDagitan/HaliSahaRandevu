@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient<IUserApiServices, UserApiServices>();
-
+builder.Services.AddScoped<IAppointmentApiServices, AppointmentApiServices>();
 
 var app = builder.Build();
 

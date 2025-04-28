@@ -6,5 +6,9 @@
         public DateTime Date { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public int CitysId { get; set; }
+        public Citys City { get; set; }
+        public int PitchId { get; set; }
+        public Pitch Pitch { get; set; }
     }
 }

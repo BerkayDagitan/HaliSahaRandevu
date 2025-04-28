@@ -18,8 +18,11 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAppointment()
+        public async Task<IActionResult> GetAppointment()
         {
+            var cities = await _service.AppointmentListAsync();
+            ViewBag.Cities = cities;
+
             return View(new AppointmentDTO());
         }
 
@@ -32,7 +35,7 @@ namespace WebUI.Controllers
                 if (result)
                 {
                     TempData["Success"] = "Randevu başarıyla alındı!";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Home","HomePage");
                 }
                 else
                 {

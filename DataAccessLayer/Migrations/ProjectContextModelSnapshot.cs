@@ -30,15 +30,30 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CitysId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("PitchId")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CitysId");
+
+                    b.HasIndex("PitchId");
+
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Appointments");
                 });
@@ -116,11 +131,31 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Entitys.Appointment", b =>
                 {
-                    b.HasOne("EntityLayer.Entitys.User", "User")
-                        .WithMany("Appointments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("EntityLayer.Entitys.Citys", "City")
+                        .WithMany()
+                        .HasForeignKey("CitysId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("EntityLayer.Entitys.Pitch", "Pitch")
+                        .WithMany()
+                        .HasForeignKey("PitchId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("EntityLayer.Entitys.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("EntityLayer.Entitys.User", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("City");
+
+                    b.Navigation("Pitch");
 
                     b.Navigation("User");
                 });
