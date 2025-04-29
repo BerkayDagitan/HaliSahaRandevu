@@ -26,6 +26,10 @@ builder.Services.AddHttpClient<IAppointmentApiServices, AppointmentApiServices>(
     client.BaseAddress = new Uri("http://localhost:5138/api/");
 });
 
+builder.Services.AddHttpClient<IPitchApiServices, PitchApiServices>();
+
+builder.Services.AddHttpClient<ICityApiServices, CityApiServices>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

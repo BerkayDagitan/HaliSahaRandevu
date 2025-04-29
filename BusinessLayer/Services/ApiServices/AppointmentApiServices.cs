@@ -12,6 +12,10 @@ namespace BusinessLayer.Services.ApiServices
 
         public AppointmentApiServices(HttpClient httpClient)
         {
+            if(httpClient.BaseAddress == null)
+    {
+                httpClient.BaseAddress = new Uri("http://localhost:5138/api/");
+            }
             _httpClient = httpClient;
         }
 

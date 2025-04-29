@@ -2,10 +2,7 @@
 using DataAccessLayer.Context;
 using EntityLayer.DTOs;
 using EntityLayer.Entitys;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
@@ -23,20 +20,24 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> CreateAppointment([FromBody]AppointmentDTO dto)
+        public async Task<IActionResult> CreateAppointment([FromBody] AppointmentDTO dto)
         {
             Appointment appointment = new Appointment()
             {
                 UserId = dto.UserId,
-                Date = dto.Date
+                Date = dto.Date,
+                CitysId = dto.CitysId,
+                PitchId = dto.PitchId
             };
-            _db.Appointments.AddAsync(appointment);
-            return _db.SaveChanges() > 0 ? Ok("Randevu oluşturuldu.") : BadRequest("Randevu oluşturulamadı.");
+            await _db.Appointments.AddAsync(appointment);
+            var saved = await _db.SaveChangesAsync();
+            return saved > 0 ? Ok("Randevu Eklendi.") : BadRequest("Randevu Eklenemedi.");
         }
 
         [HttpGet("List")]
         public IActionResult ListAppointment()
         {
-            return Ok(_db.Appointments.ToList());        }
+            return Ok(_db.Appointments.ToList());
+        }
     }
 }

@@ -8,6 +8,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient<IUserApiServices, UserApiServices>();
 builder.Services.AddScoped<IAppointmentApiServices, AppointmentApiServices>();
+builder.Services.AddScoped<IPitchApiServices, PitchApiServices>();
+builder.Services.AddScoped<ICityApiServices, CityApiServices>();
 
 var app = builder.Build();
 

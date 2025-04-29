@@ -1,4 +1,6 @@
-﻿namespace EntityLayer.Entitys
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EntityLayer.Entitys
 {
     public class Pitch
     {
