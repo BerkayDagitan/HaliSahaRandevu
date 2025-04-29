@@ -5,8 +5,6 @@ namespace DataAccessLayer.Context
 {
     public class ProjectContext : DbContext
     {
-        public ProjectContext(DbContextOptions<ProjectContext> options) : base(options) { }
-
         public DbSet<User> Users { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Pitch> Pitches { get; set; }
@@ -14,7 +12,7 @@ namespace DataAccessLayer.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=BERKAY\\SQLEXPRESS;Database=HaliSahaRandevu;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Server=BERKAY\\SQLEXPRESS;Database=HaliSahaRandevu1;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -24,20 +22,19 @@ namespace DataAccessLayer.Context
                 .HasOne(a => a.User)
                 .WithMany()
                 .HasForeignKey(a => a.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Appointment>()
-                .HasOne(a => a.City)
+                .HasOne(a => a.Citys)
                 .WithMany()
                 .HasForeignKey(a => a.CitysId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Pitch)
                 .WithMany()
                 .HasForeignKey(a => a.PitchId)
-                .OnDelete(DeleteBehavior.NoAction);
-
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

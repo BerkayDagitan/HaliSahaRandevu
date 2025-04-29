@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    [Migration("20250428200639_v1")]
+    [Migration("20250429204420_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -42,6 +42,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("PitchId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PitchId1")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -53,6 +56,8 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("CitysId");
 
                     b.HasIndex("PitchId");
+
+                    b.HasIndex("PitchId1");
 
                     b.HasIndex("UserId");
 
@@ -85,9 +90,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
 
                     b.Property<int>("CitysId")
                         .HasColumnType("int");
@@ -134,29 +136,33 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Entitys.Appointment", b =>
                 {
-                    b.HasOne("EntityLayer.Entitys.Citys", "City")
+                    b.HasOne("EntityLayer.Entitys.Citys", "Citys")
                         .WithMany()
                         .HasForeignKey("CitysId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EntityLayer.Entitys.Pitch", "Pitch")
                         .WithMany()
                         .HasForeignKey("PitchId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("EntityLayer.Entitys.Pitch", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("PitchId1");
 
                     b.HasOne("EntityLayer.Entitys.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EntityLayer.Entitys.User", null)
                         .WithMany("Appointments")
                         .HasForeignKey("UserId1");
 
-                    b.Navigation("City");
+                    b.Navigation("Citys");
 
                     b.Navigation("Pitch");
 
@@ -172,6 +178,11 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Citys");
+                });
+
+            modelBuilder.Entity("EntityLayer.Entitys.Pitch", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("EntityLayer.Entitys.User", b =>

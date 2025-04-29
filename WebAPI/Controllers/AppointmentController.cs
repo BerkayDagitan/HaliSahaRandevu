@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
         private readonly ProjectContext _db;
         private readonly IAppointmentApiServices _services;
 
-        public AppointmentController(IAppointmentApiServices services, ProjectContext db, object httpClient)
+        public AppointmentController(IAppointmentApiServices services, ProjectContext db)
         {
             _services = services;
             _db = db;

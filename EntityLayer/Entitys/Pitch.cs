@@ -6,7 +6,10 @@ namespace EntityLayer.Entitys
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int CityId { get; set; }
+
+        public int CitysId { get; set; }
         public Citys Citys { get; set; }
+
+        public List<Appointment> Appointments { get; set; }
     }
 }
