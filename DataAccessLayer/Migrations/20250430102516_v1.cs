@@ -69,9 +69,7 @@ namespace DataAccessLayer.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     CitysId = table.Column<int>(type: "int", nullable: false),
-                    PitchId = table.Column<int>(type: "int", nullable: false),
-                    PitchId1 = table.Column<int>(type: "int", nullable: true),
-                    UserId1 = table.Column<int>(type: "int", nullable: true)
+                    PitchId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,21 +87,11 @@ namespace DataAccessLayer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Appointments_Pitches_PitchId1",
-                        column: x => x.PitchId1,
-                        principalTable: "Pitches",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Appointments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Appointments_Users_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -117,19 +105,9 @@ namespace DataAccessLayer.Migrations
                 column: "PitchId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointments_PitchId1",
-                table: "Appointments",
-                column: "PitchId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Appointments_UserId",
                 table: "Appointments",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Appointments_UserId1",
-                table: "Appointments",
-                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pitches_CitysId",

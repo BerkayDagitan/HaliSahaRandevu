@@ -31,9 +31,19 @@ namespace BusinessLayer.Services.ApiServices
         }
         public async Task<List<Appointment>> AppointmentListAsync()
         {
-            var response = await _httpClient.GetFromJsonAsync<List<Appointment>>("appointments");
-
-            return response ?? new List<Appointment>();
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<List<Appointment>>("appointment/list");
+                if (response == null)
+                {
+                    return new List<Appointment>();
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new List<Appointment>();
+            }
         }
     }
 }

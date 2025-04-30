@@ -7,13 +7,13 @@ namespace WebUI.Controllers
 {
     public class AppointmentController : Controller
     {
-        private readonly IAppointmentApiServices _service;
+        private readonly IAppointmentApiServices _appointmentService;
         private readonly IPitchApiServices _pitchService;
         private readonly ICityApiServices _cityService;
 
-        public AppointmentController(IAppointmentApiServices service, IPitchApiServices pitchService, ICityApiServices cityService)
+        public AppointmentController(IAppointmentApiServices appointmentService, IPitchApiServices pitchService, ICityApiServices cityService)
         {
-            _service = service;
+            _appointmentService = appointmentService;
             _pitchService = pitchService;
             _cityService = cityService;
         }
@@ -40,7 +40,8 @@ namespace WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _service.CreateAppointmentAsync(dto);
+                dto.UserId = 1;
+                var result = await _appointmentService.CreateAppointmentAsync(dto);
                 if (result)
                 {
                     TempData["Success"] = "Randevu başarıyla alındı!";
@@ -54,6 +55,17 @@ namespace WebUI.Controllers
             ViewBag.Cities = await _cityService.GetCitiesAsync();
             ViewBag.Pitches = await _pitchService.GetPitchesAsync();
             return View(dto);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ListAppointment()
+        {
+            var appointments = await _appointmentService.AppointmentListAsync();
+            
+            return View(new AppointmentListDTO()
+            {
+                Appointments = appointments
+            });
         }
     }
 }

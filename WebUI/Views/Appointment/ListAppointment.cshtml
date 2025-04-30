@@ -1,0 +1,10 @@
+﻿@model AppointmentListDTO
+
+<div>
+	<ul>
+		@foreach (var appointment in Model.Appointments)
+		{
+			<li>@appointment.Date</li>
+		}
+	</ul>
+</div>

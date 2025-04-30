@@ -22,19 +22,19 @@ namespace DataAccessLayer.Context
         {
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.User)
-                .WithMany()
+                .WithMany(u => u.Appointments)
                 .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Citys)
-                .WithMany()
+                .WithMany(c => c.Appointments)
                 .HasForeignKey(a => a.CitysId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Pitch)
-                .WithMany()
+                .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PitchId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
