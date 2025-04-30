@@ -46,52 +46,6 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return NotFound("");
-
-
-
-
-            //if (weekOffset < -2) weekOffset = -2;
-            //if (weekOffset > 2) weekOffset = 2;
-
-            //DateTime today = DateTime.Today;
-            //DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday).Date;
-            //startOfWeek = startOfWeek.AddDays(weekOffset * 7);
-
-            //var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //if (userIdString == null)
-            //{
-            //    return Unauthorized();
-            //}
-
-            //int currentUserId = int.Parse(userIdString);
-
-            //var userAppointments = _db.Appointments
-            //    .Where(a => a.UserId == currentUserId && a.Date >= startOfWeek && a.Date < startOfWeek.AddDays(7))
-            //    .ToList();
-
-            //var slots = new List<AppointmentSlot>();
-            //for (int day = 0; day < 7; day++)
-            //{
-            //    for (int hour = 9; hour <= 23; hour++)
-            //    {
-            //        var slotDate = startOfWeek.AddDays(day).AddHours(hour);
-            //        var isBooked = userAppointments.Any(a => a.Date == slotDate);
-            //        slots.Add(new AppointmentSlot
-            //        {
-            //            DateTime = slotDate,
-            //            IsBooked = isBooked
-            //        });
-            //    }
-            //}
-
-            //var model = new WeeklyCalendarDTO
-            //{
-            //    StartOfWeek = startOfWeek,
-            //    Slots = slots,
-            //    WeekOffset = weekOffset
-            //};
-
-            //return Ok(model);
         }
     }
 }

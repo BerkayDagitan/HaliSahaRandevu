@@ -4,7 +4,10 @@
 	<ul>
 		@foreach (var appointment in Model.Appointments)
 		{
+			<li>@appointment.User</li>
 			<li>@appointment.Date</li>
+			<li>@appointment.Citys</li>
+			<li>@appointment.Pitch</li>
 		}
 	</ul>
 </div>
