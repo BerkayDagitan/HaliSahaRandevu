@@ -3,9 +3,6 @@ using DataAccessLayer.Context;
 using EntityLayer.DTOs;
 using EntityLayer.Entitys;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {

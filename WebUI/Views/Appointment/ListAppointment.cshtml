@@ -1,13 +1,54 @@
 ﻿@model AppointmentListDTO
 
-<div>
-	<ul>
-		@foreach (var appointment in Model.Appointments)
-		{
-			<li>@appointment.User</li>
-			<li>@appointment.Date</li>
-			<li>@appointment.Citys</li>
-			<li>@appointment.Pitch</li>
-		}
-	</ul>
+<div class="container mt-4">
+	<div class="row">
+		<div class="col-12">
+			<h2 class="mb-4">Randevu Listesi</h2>
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead class="table-light">
+						<tr>
+							<th>Tarih</th>
+							<th>Şehir</th>
+							<th>Saha</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var appointment in Model.Appointments)
+						{
+							<tr>
+								<td>@appointment.Date.ToString()</td>
+								<td>@appointment.Citys</td>
+								<td>@appointment.Pitch</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
+
+<style>
+	.table {
+		border-radius: 8px;
+		overflow: hidden;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	}
+	
+	.table thead th {
+		background-color: #f8f9fa;
+		border-bottom: 2px solid #dee2e6;
+		font-weight: 600;
+	}
+	
+	.table tbody tr:hover {
+		background-color: #f8f9fa;
+		transition: background-color 0.2s ease;
+	}
+	
+	h2 {
+		color: #333;
+		font-weight: 600;
+	}
+</style>
