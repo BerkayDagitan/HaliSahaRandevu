@@ -6,6 +6,7 @@ namespace BusinessLayer.Interfaces
     public interface IAppointmentApiServices
     {
         Task<bool> CreateAppointmentAsync(AppointmentDTO dto);
-        Task<List<Appointment>> AppointmentListAsync();
+        Task<List<AppointmentListDTO>> AppointmentListAsync();
+        Task<bool> DeleteAppointmentAsync(int id);
     }
 }

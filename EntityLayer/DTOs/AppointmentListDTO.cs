@@ -4,6 +4,9 @@ namespace EntityLayer.DTOs
 {
     public class AppointmentListDTO
     {
-        public List<Appointment> Appointments { get; set; }
+        public int Id { get; set; }
+        public string AppointmentDate { get; set; }
+        public string CitysName { get; set; }
+        public string PitchName { get; set; }
     }
 }

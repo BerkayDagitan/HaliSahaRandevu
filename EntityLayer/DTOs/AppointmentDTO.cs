@@ -8,5 +8,6 @@ namespace EntityLayer.DTOs
         public int UserId { get; set; }
         public int CitysId { get; set; }
         public int PitchId { get; set; }
+        public string SelectedTime { get; set; }
     }
 }

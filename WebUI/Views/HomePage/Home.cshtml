@@ -1,131 +1,344 @@
-﻿@using Microsoft.AspNetCore.Antiforgery
-@inject IAntiforgery Antiforgery
-@{
-    var token = Antiforgery.GetAndStoreTokens(Context).RequestToken;
-}
-<input type="hidden" id="__RequestVerificationToken" value="@token" />
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halı Saha Randevu Sistemi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #e6f0ff;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --text: #2b2d42;
+            --text-light: #8d99ae;
+            --white: #ffffff;
+            --danger: #e63946;
+            --danger-dark: #c1121f;
+            --success: #4cc9f0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
 
-<header>
-    <nav class="navbar">
-        <div class="container">
-            <a class="navbar-brand" href="#">Halı Saha Randevu Sistemi</a>
-            <div class="navbar-menu">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" asp-controller="Appointment" asp-action="ListAppointment">Randevularım</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="Appointment" asp-action="GetAppointment">Randevu Al</a></li>
-                    <li class="nav-item"><a class="nav-link logout" href="#">Çıkış Yap</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
 
-<style>
-    :root {
-        --primary: #4361ee;
-        --primary-light: #e6f0ff;
-        --text: #2b2d42;
-        --text-light: #8d99ae;
-        --white: #ffffff;
-        --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        --transition: all 0.3s ease;
-    }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-    body {
-        background-color: #f8f9fa;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        color: var(--text);
-        line-height: 1.6;
-        margin: 0;
-        padding: 0;
-    }
+        .navbar {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-    .container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
 
-    /* Navbar */
-    .navbar {
-        padding: 20px 0;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        background: var(--white);
-    }
+            .navbar-brand i {
+                margin-right: 10px;
+                color: var(--accent);
+            }
 
-    .navbar-brand {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--primary);
-        text-decoration: none;
-    }
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+        }
 
-    .navbar-menu {
-        display: flex;
-        align-items: center;
-    }
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            margin-left: auto;
+        }
 
-    .navbar-nav {
-        display: flex;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        margin-left: auto;
-    }
+        .nav-item {
+            margin-left: 30px;
+        }
 
-    .nav-item {
-        margin-left: 30px;
-    }
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+        }
 
-    .nav-link {
-        color: var(--text);
-        text-decoration: none;
-        font-weight: 500;
-        transition: var(--transition);
-        position: relative;
-        padding: 5px 0;
-    }
+            .nav-link i {
+                margin-right: 8px;
+            }
 
-        .nav-link:hover {
+            .nav-link:hover {
+                color: var(--primary);
+            }
+
+            .nav-link.logout {
+                color: var(--danger);
+            }
+
+                .nav-link.logout:hover {
+                    color: var(--danger-dark);
+                }
+
+        .hero {
+            background: linear-gradient(rgba(67, 97, 238, 0.8), rgba(63, 55, 201, 0.8)), url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--white);
+            color: var(--primary);
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+            .btn-primary:hover {
+                background: var(--secondary);
+                transform: translateY(-3px);
+                box-shadow: var(--shadow);
+            }
+
+        .features {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+            .section-title h2 {
+                font-size: 2rem;
+                color: var(--primary);
+                position: relative;
+                display: inline-block;
+                padding-bottom: 15px;
+            }
+
+                .section-title h2:after {
+                    content: '';
+                    position: absolute;
+                    width: 50px;
+                    height: 3px;
+                    background: var(--accent);
+                    bottom: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+            .feature-card:hover {
+                transform: translateY(-10px);
+            }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
             color: var(--primary);
         }
 
-        .nav-link.logout {
-            color: #e63946;
+        footer {
+            background: var(--text);
+            color: var(--white);
+            padding: 40px 0 20px;
+            text-align: center;
         }
 
-            .nav-link.logout:hover {
-                color: #c1121f;
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+            .footer-links a {
+                color: var(--white);
+                margin: 0 15px;
+                text-decoration: none;
+                transition: var(--transition);
             }
-</style>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const logoutBtn = document.querySelector('.logout');
-
-        logoutBtn.addEventListener('click', async function(e) {
-            e.preventDefault();
-
-            try {
-                const response = await fetch('/HomePage/Logout', {
-                    method: 'POST',
-                    headers: {
-                        'RequestVerificationToken': document.getElementById('__RequestVerificationToken').value
-                    },
-                    credentials: 'include'
-                });
-
-                if(response.ok) {
-                    alert('Başarıyla çıkış yapıldı');
-                    window.location.href = '@Url.Action("Login", "LoginPage")';
-                } else {
-                    alert('Çıkış işlemi başarısız oldu: ' + response.statusText);
+                .footer-links a:hover {
+                    color: var(--accent);
                 }
-            } catch(error) {
-                console.error('Çıkış hatası:', error);
-                alert('Bir hata oluştu, lütfen tekrar deneyin: ' + error.message);
+
+        .copyright {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        @@media (max-width: 768px) {
+            .navbar-nav
+
+        {
+            display: none;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+        }
+
+        .hero p {
+            font-size: 1rem;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a class="navbar-brand" href="#"><i class="fas fa-futbol"></i> Halı Saha Randevu</a>
+                <div class="navbar-menu">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="/Appointment/ListAppointment"><i class="fas fa-calendar-alt"></i> Randevularım</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Appointment/GetAppointment"><i class="fas fa-plus-circle"></i> Randevu Al</a></li>
+                        <li class="nav-item"><a class="nav-link logout" href="#"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Futbol Keyfiniz İçin Mükemmel Sahalar</h1>
+                <p>Kolay ve hızlı bir şekilde saha rezervasyonu yapın, arkadaşlarınızla unutulmaz maçlar yapın!</p>
+                <a href="/Appointment/GetAppointment" class="btn btn-primary">Hemen Rezervasyon Yap</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Neden Biz?</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Hızlı Rezervasyon</h3>
+                    <p>Sadece birkaç tıklamayla istediğiniz sahayı kolayca rezerve edebilirsiniz.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Uygun Fiyatlar</h3>
+                    <p>Bütçenize uygun, çeşitli ödeme seçenekleriyle saatlik kiralama imkanı.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Kaliteli Sahalar</h3>
+                    <p>Profesyonel zeminler ve bakımlı ekipmanlarla en iyi futbol deneyimi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">Hakkımızda</a>
+                <a href="#">İletişim</a>
+                <a href="#">Kullanım Koşulları</a>
+                <a href="#">Gizlilik Politikası</a>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Halı Saha Randevu Sistemi. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutBtn = document.querySelector('.logout');
+
+            if(logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if(confirm('Çıkış yapmak istediğinize emin misiniz?')) {
+                        window.location.href = '/LoginPage/Login';
+                    }
+                });
             }
         });
-    });
-</script>
+    </script>
+</body>
+</html>

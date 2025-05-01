@@ -3,6 +3,7 @@ using DataAccessLayer.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.Controllers
 {

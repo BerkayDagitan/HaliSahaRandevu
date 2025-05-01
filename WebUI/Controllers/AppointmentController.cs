@@ -40,6 +40,11 @@ namespace WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
+                var timeStart = dto.SelectedTime.Split('-')[0].Trim();
+                var time = TimeSpan.Parse(timeStart);
+
+                dto.Date = dto.Date.Date.Add(time);
+
                 dto.UserId = 1;
                 var result = await _appointmentService.CreateAppointmentAsync(dto);
                 if (result)
@@ -61,11 +66,24 @@ namespace WebUI.Controllers
         public async Task<IActionResult> ListAppointment()
         {
             var appointments = await _appointmentService.AppointmentListAsync();
-            
-            return View(new AppointmentListDTO()
+
+            return View(appointments);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAppointment(int id)
+        {
+            var result = await _appointmentService.DeleteAppointmentAsync(id);
+            if (result)
             {
-                Appointments = appointments
-            });
+                TempData["Success"] = "Randevu başarıyla silindi.";
+            }
+            else
+            {
+                TempData["Error"] = "Randevu silinirken bir hata oluştu.";
+            }
+
+            return RedirectToAction("ListAppointment");
         }
     }
 }

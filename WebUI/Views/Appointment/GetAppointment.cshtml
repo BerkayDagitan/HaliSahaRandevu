@@ -1,52 +1,201 @@
 ﻿@model AppointmentDTO
 
 @{
-    ViewData["Title"] = "Randevu Al";
+    ViewData["Title"] = "Randevu Oluştur";
 }
 
-<h2>@ViewData["Title"]</h2>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #f8f9fc;
+            --accent-color: #2e59d9;
+        }
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
-else if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
+        body {
+            background-color: var(--secondary-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<form asp-action="GetAppointment" method="post">
-    <div class="form-group">
-        <label for="CitysId">Şehir Seçiniz</label>
-        <select id="CitysId" name="CitysId" class="form-control" required>
-            <option value="">Şehir Seçiniz</option>
-            @foreach (var city in ViewBag.Cities)
-            {
-                <option value="@city.Id" selected="@(city.Id == Model.CitysId)">
-                    @city.Name
-                </option>
+        .appointment-card {
+            max-width: 550px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 2rem auto;
+            background: white;
+        }
+
+        .appointment-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .appointment-body {
+            padding: 2rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #5a5c69;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid #d1d3e2;
+            transition: all 0.3s;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
             }
-        </select>
-    </div>
 
-    <div class="form-group">
-        <label for="PitchId">Saha Seçiniz</label>
-        <select id="PitchId" name="PitchId" class="form-control" required>
-            <option value="">Saha Seçiniz</option>
-            @foreach (var pitch in ViewBag.Pitches)
-            {
-                <option value="@pitch.Id" selected="@(pitch.Id == Model.PitchId)">
-                    @pitch.Name
-                </option>
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: var(--accent-color);
+                transform: translateY(-2px);
             }
-        </select>
+
+        .alert {
+            border-radius: 8px;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .time-slot {
+            border: 1px solid #d1d3e2;
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+            .time-slot:hover {
+                background-color: #f0f3ff;
+            }
+
+            .time-slot.selected {
+                background-color: var(--primary-color);
+                color: white;
+                border-color: var(--primary-color);
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="appointment-card">
+            <div class="appointment-header">
+                <h2 class="mb-0">@ViewData["Title"]</h2>
+            </div>
+
+            <div class="appointment-body">
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show">
+                        @TempData["Success"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+                else if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        @TempData["Error"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <form asp-action="GetAppointment" method="post">
+                    <div class="mb-4">
+                        <label for="CitysId" class="form-label">Şehir Seçimi</label>
+                        <select id="CitysId" name="CitysId" class="form-select" required>
+                            <option value="">Lütfen bir şehir seçin</option>
+                            @foreach (var city in ViewBag.Cities)
+                            {
+                                <option value="@city.Id" selected="@(city.Id == Model.CitysId)">
+                                    @city.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="PitchId" class="form-label">Saha Seçimi</label>
+                        <select id="PitchId" name="PitchId" class="form-select" required>
+                            <option value="">Lütfen bir saha seçin</option>
+                            @foreach (var pitch in ViewBag.Pitches)
+                            {
+                                <option value="@pitch.Id" selected="@(pitch.Id == Model.PitchId)">
+                                    @pitch.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="Date" class="form-label">Tarih ve Saat</label>
+                        <input type="date" id="Date" name="Date" class="form-control mb-2"
+                               value="@Model.Date.ToString("yyyy-MM-dd")" required />
+
+                        <div class="time-slots">
+                            <input type="hidden" id="SelectedTime" name="SelectedTime" required />
+                            <div class="time-slot" data-time="09:00 - 10:30">09:00 - 10:30</div>
+                            <div class="time-slot" data-time="11:00 - 12:30">11:00 - 12:30</div>
+                            <div class="time-slot" data-time="13:00 - 14:30">13:00 - 14:30</div>
+                            <div class="time-slot" data-time="15:00 - 16:30">15:00 - 16:30</div>
+                            <div class="time-slot" data-time="17:00 - 18:30">17:00 - 18:30</div>
+                            <div class="time-slot" data-time="19:00 - 20:30">19:00 - 20:30</div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-calendar-check"></i> Randevu Oluştur
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label for="Date">Tarih Seçiniz</label>
-        <input type="datetime-local" id="Date" name="Date" class="form-control"
-               value="@(Model.Date.ToString("yyyy-MM-ddTHH:mm"))" required />
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                document.getElementById('SelectedTime').value = this.getAttribute('data-time');
+            });
+        });
 
-    <button type="submit" class="btn btn-primary">Randevu Al</button>
-</form>
+        document.getElementById('CitysId').addEventListener('change', function() {
+            const cityId = this.value;
+        });
+    </script>
+</body>
+</html>
