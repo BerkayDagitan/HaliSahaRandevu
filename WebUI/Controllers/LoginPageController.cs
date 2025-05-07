@@ -47,7 +47,7 @@ namespace WebUI.Controllers
                 if (result)
                 {
                     TempData["SuccessRegister"] = "Kayıt başarılı!";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Login");
                 }
                 else
                 {

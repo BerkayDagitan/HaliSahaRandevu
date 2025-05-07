@@ -1,8 +1,11 @@
 ﻿using BusinessLayer.Interfaces;
+using BusinessLayer.Interfaces.Token;
 using DataAccessLayer.Context;
 using EntityLayer.DTOs;
 using EntityLayer.Entitys;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace WebAPI.Controllers
 {
@@ -12,16 +15,22 @@ namespace WebAPI.Controllers
     {   
         private readonly ProjectContext _db;
         private readonly IUserApiServices _services;
+        private readonly ITokenService _tokenService;
 
-        public UserController(IUserApiServices userApiServices, ProjectContext context)
+        public UserController(IUserApiServices userApiServices, ProjectContext context, ITokenService tokenService)
         {
             _services = userApiServices;
             _db = context;
+            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
-        public IActionResult PostRegister([FromBody] RegisterUserDTO dto)
+        public async Task<IActionResult> PostRegister([FromBody] RegisterUserDTO dto)
         {
+            if (dto == null)
+            {
+                return BadRequest("Kullanıcı bilgileri eksik.");
+            }
             User user = new User()
             {
                 FirstName = dto.FirstName,
@@ -29,8 +38,8 @@ namespace WebAPI.Controllers
                 UserName = dto.UserName,
                 Password = dto.Password
             };
-            _db.Users.AddAsync(user);
-            return _db.SaveChanges() > 0 ? Ok("Kayıt Başarılı") : BadRequest("Kayıt Başarısız");
+            await _db.Users.AddAsync(user);
+            return await _db.SaveChangesAsync() > 0 ? Ok("Kayıt Başarılı") : BadRequest("Kayıt Başarısız");
         }
 
         [HttpPost("login")]
@@ -40,14 +49,21 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("Kullanıcı adı veya şifre boş olamaz.");
             }
-
-            var user = _db.Users.Where(x => x.UserName.ToLower() == dto.UserName.ToLower() && x.Password == dto.Password).FirstOrDefault();
-
+            var user = await _db.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == dto.UserName.ToLower() && x.Password == dto.Password);
             if (user == null)
             {
                 return NotFound("Kullanıcı adı veya şifreniz hatalı. Tekrar deneyiniz.");
             }
-            return Ok(user);
+            var token = _tokenService.GenerateJwtToken(user);
+            return Ok(new
+            {
+                token,
+                user = new
+                {
+                    user.UserName,
+                    user.Password
+                }
+            });
         }
     }
 }

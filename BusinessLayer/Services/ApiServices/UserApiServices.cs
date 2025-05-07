@@ -2,6 +2,7 @@
 using EntityLayer.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
 
@@ -38,10 +39,13 @@ namespace BusinessLayer.Services.ApiServices
 
                 if (!string.IsNullOrEmpty(resultString))
                 {
-                    var user = JsonConvert.DeserializeObject<UserLoginDTO>(resultString);
-                    if (user != null && user.UserName == username && user.Password == password)
+                    dynamic json = JsonConvert.DeserializeObject(resultString);
+                    string userName = json.user.userName;
+                    string pass = json.user.password;
+
+                    if (userName == username && pass == password)
                     {
-                        return user;
+                        return new UserLoginDTO { UserName = userName, Password = pass };
                     }
                     else
                     {
@@ -71,9 +75,7 @@ namespace BusinessLayer.Services.ApiServices
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             var result = await _httpClient.PostAsync("User/register", content);
 
-            if (result.IsSuccessStatusCode is true)
-                return result.Content.ReadAsStringAsync().Result == "Üye oluşturuldu." ? true : false;
-            return false;
+            return result.IsSuccessStatusCode;
         }
     }
 }
