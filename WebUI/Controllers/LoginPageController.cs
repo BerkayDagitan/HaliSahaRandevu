@@ -1,5 +1,6 @@
 ﻿using AspNetCoreGeneratedDocument;
 using BusinessLayer.Interfaces;
+using BusinessLayer.Interfaces.Token;
 using EntityLayer.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +9,12 @@ namespace WebUI.Controllers
     public class LoginPageController : Controller
     {
         private readonly IUserApiServices _service;
+        private readonly ITokenService _tokenService;
 
-        public LoginPageController(IUserApiServices service)
+        public LoginPageController(IUserApiServices service, ITokenService tokenService)
         {
             _service = service;
+            _tokenService = tokenService;
         }
 
         [HttpGet]
@@ -29,6 +32,7 @@ namespace WebUI.Controllers
                 TempData["Error"] = "Kullanıcı adı veya şifre hatalı!";
                 return View();
             }
+
             return RedirectToAction("Home","HomePage");
         }
 

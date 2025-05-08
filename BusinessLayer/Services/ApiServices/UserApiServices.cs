@@ -36,21 +36,17 @@ namespace BusinessLayer.Services.ApiServices
             if (result.IsSuccessStatusCode)
             {
                 var resultString = await result.Content.ReadAsStringAsync();
+                dynamic json = JsonConvert.DeserializeObject(resultString);
+                string userName = json.user.userName;
+                string pass = json.user.password;
 
-                if (!string.IsNullOrEmpty(resultString))
+                if (userName == username && pass == password)
                 {
-                    dynamic json = JsonConvert.DeserializeObject(resultString);
-                    string userName = json.user.userName;
-                    string pass = json.user.password;
-
-                    if (userName == username && pass == password)
-                    {
-                        return new UserLoginDTO { UserName = userName, Password = pass };
-                    }
-                    else
-                    {
-                        throw new Exception("Kullanıcı bulunamadı.");
-                    }
+                    return new UserLoginDTO { UserName = userName, Password = pass };
+                }
+                else
+                {
+                    throw new Exception("Kullanıcı bulunamadı.");
                 }
             }
             return null;

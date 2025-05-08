@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Interfaces.Token;
+﻿using Azure.Core;
+using BusinessLayer.Interfaces.Token;
 using EntityLayer.Entitys;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -38,6 +39,18 @@ namespace BusinessLayer.Services.TokenServices
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public int GetUserIdFromToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim != null)
+            {
+                return int.Parse(userIdClaim.Value);
+            }
+            throw new Exception("Kullanıcı ID'si bulunamadı");
         }
     }
 }
