@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using BusinessLayer.Interfaces.Token;
 
 namespace WebAPI.Controllers
 {
@@ -15,27 +16,13 @@ namespace WebAPI.Controllers
     {
         private readonly ProjectContext _db;
         private readonly IAppointmentApiServices _services;
+        private readonly ITokenService _tokenService;
 
-        public AppointmentController(IAppointmentApiServices services, ProjectContext db)
+        public AppointmentController(IAppointmentApiServices services, ProjectContext db, ITokenService tokenService)
         {
             _services = services;
             _db = db;
-        }
-
-        private int GetUserIdFromToken()
-        {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-                throw new Exception("Token bulunamadı");
-            var token = authHeader.Substring("Bearer ".Length).Trim();
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
-            var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            if (userIdClaim != null)
-            {
-                return int.Parse(userIdClaim.Value);
-            }
-            throw new Exception("Kullanıcı ID'si bulunamadı");
+            _tokenService = tokenService;
         }
 
         [HttpPost("Create")]
@@ -56,7 +43,11 @@ namespace WebAPI.Controllers
         [HttpGet("List")]
         public async Task<IActionResult> ListAppointment(int weekOffset = 0)
         {
-            int userId = GetUserIdFromToken();
+            var authHeader = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                throw new Exception("Token bulunamadı");
+            var token = authHeader.Substring("Bearer ".Length).Trim();
+            int userId = _tokenService.GetUserIdFromToken(token);
             var result = await Task.FromResult(_db.Appointments
                 .Where(x => x.UserId == userId)
                 .Include(x => x.Pitch)
