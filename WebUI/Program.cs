@@ -1,4 +1,4 @@
- using BusinessLayer.Interfaces;
+using BusinessLayer.Interfaces;
 using BusinessLayer.Interfaces.Token;
 using BusinessLayer.Services.ApiServices;
 using BusinessLayer.Services.TokenServices;
@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient<IUserApiServices, UserApiServices>();
 builder.Services.AddScoped<IAppointmentApiServices, AppointmentApiServices>();
@@ -24,6 +25,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

@@ -2,6 +2,8 @@
 using EntityLayer.DTOs;
 using EntityLayer.Entitys;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace WebUI.Controllers
 {
@@ -35,6 +37,18 @@ namespace WebUI.Controllers
             return View(new AppointmentDTO());
         }
 
+        private int GetUserIdFromToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim != null)
+            {
+                return int.Parse(userIdClaim.Value);
+            }
+            throw new Exception("Kullanıcı ID'si bulunamadı");
+        }
+
         [HttpPost]
         public async Task<IActionResult> GetAppointment(AppointmentDTO dto)
         {
@@ -42,10 +56,14 @@ namespace WebUI.Controllers
             {
                 var timeStart = dto.SelectedTime.Split('-')[0].Trim();
                 var time = TimeSpan.Parse(timeStart);
-
                 dto.Date = dto.Date.Date.Add(time);
 
-                dto.UserId = 1;
+                string token = HttpContext.Session.GetString("Token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return RedirectToAction("Login", "LoginPage");
+                }
+                dto.UserId = GetUserIdFromToken(token);
                 var result = await _appointmentService.CreateAppointmentAsync(dto);
                 if (result)
                 {

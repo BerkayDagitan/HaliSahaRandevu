@@ -24,7 +24,7 @@ namespace BusinessLayer.Services.ApiServices
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<UserLoginDTO> LoginUserAsync(string username, string password)
+        public async Task<LoginResponseDTO> LoginUserAsync(string username, string password)
         {
             var loginInfo = new
             {
@@ -36,17 +36,10 @@ namespace BusinessLayer.Services.ApiServices
             if (result.IsSuccessStatusCode)
             {
                 var resultString = await result.Content.ReadAsStringAsync();
-                dynamic json = JsonConvert.DeserializeObject(resultString);
-                string userName = json.user.userName;
-                string pass = json.user.password;
-
-                if (userName == username && pass == password)
+                var loginResponse = JsonConvert.DeserializeObject<LoginResponseDTO>(resultString);
+                if (loginResponse != null && loginResponse.User != null)
                 {
-                    return new UserLoginDTO { UserName = userName, Password = pass };
-                }
-                else
-                {
-                    throw new Exception("Kullanıcı bulunamadı.");
+                    return loginResponse;
                 }
             }
             return null;

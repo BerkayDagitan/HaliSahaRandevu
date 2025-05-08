@@ -3,6 +3,7 @@ using EntityLayer.DTOs;
 using EntityLayer.Entitys;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace BusinessLayer.Services.ApiServices
 {
@@ -33,18 +34,27 @@ namespace BusinessLayer.Services.ApiServices
         {
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<List<AppointmentListDTO>>("appointment/list");
-                if (response == null)
+                var httpContextAccessor = new HttpContextAccessor();
+                string token = httpContextAccessor.HttpContext?.Session.GetString("Token");
+
+                var request = new HttpRequestMessage(HttpMethod.Get, "appointment/list");
+                if (!string.IsNullOrEmpty(token))
                 {
-                    return new List<AppointmentListDTO>();
+                    request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
                 }
-                return response;
+
+                var response = await _httpClient.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<AppointmentListDTO>>(json);
+                }
+                return new List<AppointmentListDTO>();
             }
-            catch (Exception ex)
+            catch
             {
                 return new List<AppointmentListDTO>();
             }
-
         }
 
         public async Task<bool> DeleteAppointmentAsync(int id)

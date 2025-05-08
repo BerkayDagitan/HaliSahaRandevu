@@ -26,12 +26,14 @@ namespace WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            var user = await _service.LoginUserAsync(username, password);
-            if(user == null)
+            var loginResponse = await _service.LoginUserAsync(username, password);
+            if(loginResponse == null)
             {
                 TempData["Error"] = "Kullanıcı adı veya şifre hatalı!";
                 return View();
             }
+
+            HttpContext.Session.SetString("Token", loginResponse.Token);
 
             return RedirectToAction("Home","HomePage");
         }
