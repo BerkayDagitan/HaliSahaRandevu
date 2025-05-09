@@ -6,5 +6,6 @@ namespace BusinessLayer.Interfaces.Token
     {
         string GenerateJwtToken(User user);
         int GetUserIdFromToken(string token);
+        
     }
 }

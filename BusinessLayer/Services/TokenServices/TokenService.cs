@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using BusinessLayer.Interfaces.Token;
+﻿using BusinessLayer.Interfaces.Token;
 using EntityLayer.Entitys;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

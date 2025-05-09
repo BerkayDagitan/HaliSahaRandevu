@@ -1,12 +1,10 @@
 ﻿using BusinessLayer.Interfaces;
+using BusinessLayer.Interfaces.Token;
 using DataAccessLayer.Context;
 using EntityLayer.DTOs;
 using EntityLayer.Entitys;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using BusinessLayer.Interfaces.Token;
 
 namespace WebAPI.Controllers
 {
@@ -78,9 +76,9 @@ namespace WebAPI.Controllers
                 }
                 _db.Appointments.Remove(appointment);
                 var result = await _db.SaveChangesAsync();
-                
-                return result > 0 
-                    ? Ok("Randevu başarıyla silindi.") 
+
+                return result > 0
+                    ? Ok("Randevu başarıyla silindi.")
                     : BadRequest("Randevu silinirken bir hata oluştu.");
             }
             catch (Exception ex)

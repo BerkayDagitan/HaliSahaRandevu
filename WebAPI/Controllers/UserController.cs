@@ -5,14 +5,13 @@ using EntityLayer.DTOs;
 using EntityLayer.Entitys;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
-    {   
+    {
         private readonly ProjectContext _db;
         private readonly IUserApiServices _services;
         private readonly ITokenService _tokenService;
