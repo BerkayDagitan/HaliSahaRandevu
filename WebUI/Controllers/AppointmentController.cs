@@ -26,10 +26,16 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAppointment()
+        public async Task<IActionResult> GetAppointment(int? cityId)
         {
+            
             List<Citys>? cities = await _cityService.GetCitiesAsync();
             var pitches = await _pitchService.GetPitchesAsync();
+
+            if (cityId.HasValue)
+            {
+                pitches = pitches.Where(p => p.CitysId == cityId.Value).ToList();
+            }
 
             ViewBag.Cities = cities;
             ViewBag.Pitches = pitches;
@@ -102,6 +108,15 @@ namespace WebUI.Controllers
             }
 
             return RedirectToAction("ListAppointment");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPitchesByCity(int cityId)
+        {
+            var pitches = await _pitchService.GetPitchesAsync();
+            var filteredPitches = pitches.Where(p => p.CitysId == cityId).ToList();
+
+            return PartialView("_PitchListPartial", filteredPitches);
         }
     }
 }

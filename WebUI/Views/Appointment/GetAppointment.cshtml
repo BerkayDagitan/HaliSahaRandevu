@@ -223,6 +223,19 @@
         document.getElementById('CitysId').addEventListener('change', function() {
             const cityId = this.value;
         });
+                document.getElementById('CitysId').addEventListener('change', function() {
+            const cityId = this.value;
+            if (cityId) {
+                fetch(`/Appointment/GetPitchesByCity?cityId=${cityId}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('PitchId').innerHTML = data;
+                    })
+                    .catch(error => console.error('Error fetching pitches:', error));
+            } else {
+                document.getElementById('PitchId').innerHTML = '<option value="">Lütfen bir saha seçin</option>';
+            }
+        });
     </script>
 </body>
 </html>

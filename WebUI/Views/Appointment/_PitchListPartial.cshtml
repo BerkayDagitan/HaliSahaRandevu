@@ -1,0 +1,7 @@
+@using EntityLayer.Entitys
+@model IEnumerable<Pitch>
+
+@foreach (var pitch in Model)
+{
+    <option value="@pitch.Id">@pitch.Name</option>
+} 
