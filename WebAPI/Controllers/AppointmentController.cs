@@ -33,6 +33,12 @@ namespace WebAPI.Controllers
                 CitysId = dto.CitysId,
                 PitchId = dto.PitchId
             };
+
+            var existingAppointment = await _db.Appointments.FirstOrDefaultAsync(x => x.Date == dto.Date && x.PitchId == dto.PitchId);
+            if (existingAppointment != null)
+            {
+                return BadRequest("Bu tarih ve saat için randevu zaten mevcut.");
+            }
             await _db.Appointments.AddAsync(appointment);
             var saved = await _db.SaveChangesAsync();
             return saved > 0 ? Ok("Randevu Eklendi.") : BadRequest("Randevu Eklenemedi.");

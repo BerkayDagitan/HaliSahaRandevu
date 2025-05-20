@@ -28,7 +28,8 @@ namespace BusinessLayer.Services.ApiServices
 
             if (result.IsSuccessStatusCode is true)
                 return result.Content.ReadAsStringAsync().Result == "Randevu Eklendi." ? true : false;
-            return false;
+            var errorMessage = await result.Content.ReadAsStringAsync();
+            throw new Exception(errorMessage);
         }
         public async Task<List<AppointmentListDTO>> AppointmentListAsync()
         {

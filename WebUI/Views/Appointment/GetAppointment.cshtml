@@ -190,13 +190,30 @@
                                value="@Model.Date.ToString("yyyy-MM-dd")" required />
 
                         <div class="time-slots">
-                            <input type="hidden" id="SelectedTime" name="SelectedTime" required />
-                            <div class="time-slot" data-time="09:00 - 10:30">09:00 - 10:30</div>
-                            <div class="time-slot" data-time="11:00 - 12:30">11:00 - 12:30</div>
-                            <div class="time-slot" data-time="13:00 - 14:30">13:00 - 14:30</div>
-                            <div class="time-slot" data-time="15:00 - 16:30">15:00 - 16:30</div>
-                            <div class="time-slot" data-time="17:00 - 18:30">17:00 - 18:30</div>
-                            <div class="time-slot" data-time="19:00 - 20:30">19:00 - 20:30</div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="SelectedTime" id="time1" value="09:00 - 10:30" @(Model.SelectedTime == "09:00 - 10:30" ? "checked" : "") required>
+                                <label class="form-check-label" for="time1">09:00 - 10:30</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="SelectedTime" id="time2" value="11:00 - 12:30" @(Model.SelectedTime == "11:00 - 12:30" ? "checked" : "")>
+                                <label class="form-check-label" for="time2">11:00 - 12:30</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="SelectedTime" id="time3" value="13:00 - 14:30" @(Model.SelectedTime == "13:00 - 14:30" ? "checked" : "")>
+                                <label class="form-check-label" for="time3">13:00 - 14:30</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="SelectedTime" id="time4" value="15:00 - 16:30" @(Model.SelectedTime == "15:00 - 16:30" ? "checked" : "")>
+                                <label class="form-check-label" for="time4">15:00 - 16:30</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="SelectedTime" id="time5" value="17:00 - 18:30" @(Model.SelectedTime == "17:00 - 18:30" ? "checked" : "")>
+                                <label class="form-check-label" for="time5">17:00 - 18:30</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="SelectedTime" id="time6" value="19:00 - 20:30" @(Model.SelectedTime == "19:00 - 20:30" ? "checked" : "")>
+                                <label class="form-check-label" for="time6">19:00 - 20:30</label>
+                            </div>
                         </div>
                     </div>
 

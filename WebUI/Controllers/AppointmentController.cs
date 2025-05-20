@@ -4,6 +4,7 @@ using EntityLayer.Entitys;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebUI.Controllers
 {
@@ -28,7 +29,7 @@ namespace WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAppointment(int? cityId)
         {
-            
+            TempData["Error"] = null;
             List<Citys>? cities = await _cityService.GetCitiesAsync();
             var pitches = await _pitchService.GetPitchesAsync();
 
@@ -70,15 +71,22 @@ namespace WebUI.Controllers
                     return RedirectToAction("Login", "LoginPage");
                 }
                 dto.UserId = GetUserIdFromToken(token);
-                var result = await _appointmentService.CreateAppointmentAsync(dto);
-                if (result)
+                try
                 {
-                    TempData["Success"] = "Randevu başarıyla alındı!";
-                    return RedirectToAction("Home", "HomePage");
+                    var result = await _appointmentService.CreateAppointmentAsync(dto);
+                    if (result)
+                    {
+                        TempData["Success"] = "Randevu başarıyla alındı!";
+                        return RedirectToAction("Home", "HomePage");
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Randevu alınamadı!";
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    TempData["Error"] = "Randevu alınamadı!";
+                    TempData["Error"] = ex.Message;
                 }
             }
             ViewBag.Cities = await _cityService.GetCitiesAsync();
