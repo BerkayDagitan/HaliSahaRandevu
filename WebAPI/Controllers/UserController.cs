@@ -15,12 +15,14 @@ namespace WebAPI.Controllers
         private readonly ProjectContext _db;
         private readonly IUserApiServices _services;
         private readonly ITokenService _tokenService;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public UserController(IUserApiServices userApiServices, ProjectContext context, ITokenService tokenService)
+        public UserController(IUserApiServices userApiServices, ProjectContext context, ITokenService tokenService, IPasswordHasher passwordHasher)
         {
             _services = userApiServices;
             _db = context;
             _tokenService = tokenService;
+            _passwordHasher = passwordHasher;
         }
 
         [HttpPost("register")]
@@ -30,15 +32,40 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("Kullanıcı bilgileri eksik.");
             }
+
+            if(await _db.Users.AnyAsync(u => u.UserName.ToLower() == dto.UserName.ToLower()))
+            {
+                return BadRequest("Bu kullanıcı adı zaten kullanılıyor.");
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.Password) || dto.Password.Length < 10)
+            {
+                return BadRequest("Şifre en az 10 karakter olmalı.");
+            }
+
+            string hashedPassword = _passwordHasher.HashPassword(dto.Password);
+
             User user = new User()
             {
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 UserName = dto.UserName,
-                Password = dto.Password
+                Password = hashedPassword
             };
-            await _db.Users.AddAsync(user);
-            return await _db.SaveChangesAsync() > 0 ? Ok("Kayıt Başarılı") : BadRequest("Kayıt Başarısız");
+
+            try
+            {
+                await _db.Users.AddAsync(user);
+                var result = await _db.SaveChangesAsync();
+                if (result > 0)
+                    return Ok("Kayıt Başarılı");
+                else
+                    return BadRequest("Kayıt Başarısız");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Kayıt sırasında hata oluştu: {ex.Message}");
+            }
         }
 
         [HttpPost("login")]
@@ -48,11 +75,14 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("Kullanıcı adı veya şifre boş olamaz.");
             }
-            var user = await _db.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == dto.UserName.ToLower() && x.Password == dto.Password);
-            if (user == null)
+
+            var user = await _db.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == dto.UserName.ToLower());
+
+            if (user == null || !_passwordHasher.VerifyPassword(dto.Password, user.Password))
             {
                 return NotFound("Kullanıcı adı veya şifreniz hatalı. Tekrar deneyiniz.");
             }
+
             var token = _tokenService.GenerateJwtToken(user);
             return Ok(new
             {
@@ -60,7 +90,8 @@ namespace WebAPI.Controllers
                 user = new
                 {
                     user.UserName,
-                    user.Password
+                    user.FirstName,
+                    user.LastName
                 }
             });
         }

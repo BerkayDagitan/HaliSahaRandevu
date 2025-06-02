@@ -1,18 +1,16 @@
 using BusinessLayer.Interfaces;
 using BusinessLayer.Interfaces.Token;
 using BusinessLayer.Services.ApiServices;
+using BusinessLayer.Services.PasswordHash;
 using BusinessLayer.Services.TokenServices;
 using DataAccessLayer.Context;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ProjectContext>

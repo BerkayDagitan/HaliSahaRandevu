@@ -187,7 +187,13 @@
                     <div class="mb-4">
                         <label for="Date" class="form-label">Tarih ve Saat</label>
                         <input type="date" id="Date" name="Date" class="form-control mb-2"
-                               value="@Model.Date.ToString("yyyy-MM-dd")" required />
+                               value="@DateTime.Today.ToString("yyyy-MM-dd")" 
+                               min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                               required />
+                        <div id="dateAlert" class="alert alert-danger mt-2" style="display: none;">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <span>Geçmiş bir tarih seçemezsiniz!</span>
+                        </div>
 
                         <div class="time-slots">
                             <div class="form-check">
@@ -229,6 +235,24 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        document.getElementById('Date').addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const dateAlert = document.getElementById('dateAlert');
+
+            if (selectedDate < today) {
+                dateAlert.style.display = 'block';
+                this.value = today.toISOString().split('T')[0];
+                
+                setTimeout(() => {
+                    dateAlert.style.display = 'none';
+                }, 3000);
+            } else {
+                dateAlert.style.display = 'none';
+            }
+        });
+
         document.querySelectorAll('.time-slot').forEach(slot => {
             slot.addEventListener('click', function() {
                 document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
