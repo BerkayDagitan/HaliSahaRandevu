@@ -62,5 +62,30 @@ namespace WebUI.Controllers
             }
             return View(dto);
         }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View(new ChangePasswordDTO());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDTO dto)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _service.ChangePasswordAsync(dto);
+                if (result)
+                {
+                    TempData["SuccessChangePassword"] = "Şifre değişikliği başarılı!";
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    TempData["ErrorChangePassword"] = "Şifre değişikliği başarısız!";
+                }
+            }
+            return View(dto);
+        }
     }
 }

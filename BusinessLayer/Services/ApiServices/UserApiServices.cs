@@ -24,6 +24,15 @@ namespace BusinessLayer.Services.ApiServices
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<bool> ChangePasswordAsync(ChangePasswordDTO dto)
+        {
+            var token = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var result = await _httpClient.PostAsJsonAsync("User/change-password", dto);
+            return result.IsSuccessStatusCode;
+        }
+
         public async Task<LoginResponseDTO> LoginUserAsync(string username, string password)
         {
             var loginInfo = new

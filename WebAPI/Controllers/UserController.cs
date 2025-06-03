@@ -5,6 +5,7 @@ using EntityLayer.DTOs;
 using EntityLayer.Entitys;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WebAPI.Controllers
 {
@@ -94,6 +95,24 @@ namespace WebAPI.Controllers
                     user.LastName
                 }
             });
+        }
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO dto)
+        {
+            var userId = _tokenService.GetUserIdFromToken(Request.Headers["Authorization"].ToString().Replace("Bearer ", ""));
+            var user = await _db.Users.FindAsync(userId);
+
+            if(user == null)
+            {
+                return NotFound("Kullanıcı bulunamadı.");
+            }
+            if(!_passwordHasher.VerifyPassword(dto.CurrentPassword, user.Password))
+            {
+                return BadRequest("Mevcut şifre yanlış.");
+            }
+            user.Password = _passwordHasher.HashPassword(dto.NewPassword);
+            await _db.SaveChangesAsync();
+            return Ok("Şifre başarıyla değiştirildi.");
         }
     }
 }

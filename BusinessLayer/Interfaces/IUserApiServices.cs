@@ -7,5 +7,6 @@ namespace BusinessLayer.Interfaces
         Task<bool> RegisterUserAsync(RegisterUserDTO dto);
         Task<LoginResponseDTO> LoginUserAsync(string username, string password);
         Task<bool> LogoutUserAsync();
+        Task<bool> ChangePasswordAsync(ChangePasswordDTO dto);
     }
 }
