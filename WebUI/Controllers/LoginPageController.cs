@@ -78,7 +78,7 @@ namespace WebUI.Controllers
                 if (result)
                 {
                     TempData["SuccessChangePassword"] = "Şifre değişikliği başarılı!";
-                    return RedirectToAction("Login");
+                    return RedirectToAction("Home", "HomePage");
                 }
                 else
                 {

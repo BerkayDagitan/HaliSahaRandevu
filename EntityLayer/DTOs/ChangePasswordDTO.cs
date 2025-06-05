@@ -4,13 +4,15 @@ namespace EntityLayer.DTOs
 {
     public class ChangePasswordDTO
     {
-        [Required]
+        [Required(ErrorMessage = "Mevcut şifre zorunludur.")]
         public string CurrentPassword { get; set; }
-        [Required]
-        [MinLength(10)]
+        
+        [Required(ErrorMessage = "Yeni şifre zorunludur.")]
+        [MinLength(10, ErrorMessage = "Şifre en az 10 karakter olmalıdır.")]
         public string NewPassword { get; set; }
-        [Required]
-        [Compare("NewPassword")]
-        public string ConfirmPassword { get; set; }
+        
+        [Required(ErrorMessage = "Şifre tekrarı zorunludur.")]
+        [Compare("NewPassword", ErrorMessage = "Şifreler eşleşmiyor.")]
+        public string ConfirmNewPassword { get; set; }
     }
 }

@@ -5,7 +5,6 @@ using EntityLayer.DTOs;
 using EntityLayer.Entitys;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WebAPI.Controllers
 {
@@ -17,13 +16,15 @@ namespace WebAPI.Controllers
         private readonly IUserApiServices _services;
         private readonly ITokenService _tokenService;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IEmailServices _emailServices;
 
-        public UserController(IUserApiServices userApiServices, ProjectContext context, ITokenService tokenService, IPasswordHasher passwordHasher)
+        public UserController(IUserApiServices userApiServices, ProjectContext context, ITokenService tokenService, IPasswordHasher passwordHasher, IEmailServices emailServices)
         {
             _services = userApiServices;
             _db = context;
             _tokenService = tokenService;
             _passwordHasher = passwordHasher;
+            _emailServices = emailServices;
         }
 
         [HttpPost("register")]
@@ -34,7 +35,7 @@ namespace WebAPI.Controllers
                 return BadRequest("Kullanıcı bilgileri eksik.");
             }
 
-            if(await _db.Users.AnyAsync(u => u.UserName.ToLower() == dto.UserName.ToLower()))
+            if (await _db.Users.AnyAsync(u => u.UserName.ToLower() == dto.UserName.ToLower()))
             {
                 return BadRequest("Bu kullanıcı adı zaten kullanılıyor.");
             }
@@ -44,6 +45,11 @@ namespace WebAPI.Controllers
                 return BadRequest("Şifre en az 10 karakter olmalı.");
             }
 
+            if (dto.Email == null)
+            {
+                return BadRequest("Email adresi boş olamaz.");
+            }
+
             string hashedPassword = _passwordHasher.HashPassword(dto.Password);
 
             User user = new User()
@@ -51,7 +57,8 @@ namespace WebAPI.Controllers
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 UserName = dto.UserName,
-                Password = hashedPassword
+                Password = hashedPassword,
+                Email = dto.Email
             };
 
             try
@@ -59,9 +66,15 @@ namespace WebAPI.Controllers
                 await _db.Users.AddAsync(user);
                 var result = await _db.SaveChangesAsync();
                 if (result > 0)
+                {
+                    await _emailServices.SendWelcomeEmailAsync(dto.Email, dto.FirstName);
                     return Ok("Kayıt Başarılı");
+                }
                 else
+                {
                     return BadRequest("Kayıt Başarısız");
+                }
+                    
             }
             catch (Exception ex)
             {
@@ -99,20 +112,44 @@ namespace WebAPI.Controllers
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO dto)
         {
-            var userId = _tokenService.GetUserIdFromToken(Request.Headers["Authorization"].ToString().Replace("Bearer ", ""));
-            var user = await _db.Users.FindAsync(userId);
+            try
+            {
+                var authHeader = Request.Headers["Authorization"].ToString();
+                if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                {
+                    return Unauthorized("Geçersiz veya eksik token.");
+                }
 
-            if(user == null)
-            {
-                return NotFound("Kullanıcı bulunamadı.");
+                var token = authHeader.Replace("Bearer ", "");
+                int userId;
+                try
+                {
+                    userId = _tokenService.GetUserIdFromToken(token);
+                }
+                catch
+                {
+                    return Unauthorized("Geçersiz token.");
+                }
+
+                var user = await _db.Users.FindAsync(userId);
+                if (user == null)
+                {
+                    return NotFound("Kullanıcı bulunamadı.");
+                }
+
+                if (!_passwordHasher.VerifyPassword(dto.CurrentPassword, user.Password))
+                {
+                    return BadRequest("Mevcut şifre yanlış.");
+                }
+
+                user.Password = _passwordHasher.HashPassword(dto.NewPassword);
+                await _db.SaveChangesAsync();
+                return Ok("Şifre başarıyla değiştirildi.");
             }
-            if(!_passwordHasher.VerifyPassword(dto.CurrentPassword, user.Password))
+            catch (Exception ex)
             {
-                return BadRequest("Mevcut şifre yanlış.");
+                return StatusCode(500, $"Şifre değiştirme sırasında bir hata oluştu: {ex.Message}");
             }
-            user.Password = _passwordHasher.HashPassword(dto.NewPassword);
-            await _db.SaveChangesAsync();
-            return Ok("Şifre başarıyla değiştirildi.");
         }
     }
 }
