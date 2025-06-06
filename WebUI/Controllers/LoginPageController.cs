@@ -49,15 +49,18 @@ namespace WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _service.RegisterUserAsync(dto);
-                if (result)
+                try
                 {
-                    TempData["SuccessRegister"] = "Kayıt başarılı!";
-                    return RedirectToAction("Login");
+                    var result = await _service.RegisterUserAsync(dto);
+                    if (result)
+                    {
+                        TempData["SuccessRegister"] = "Kayıt başarılı!";
+                        return RedirectToAction("Login");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    TempData["ErrorRegister"] = "Kayıt başarısız!";
+                    TempData["ErrorRegister"] = $"Kayıt sırasında hata oluştu: {ex.Message}";
                 }
             }
             return View(dto);

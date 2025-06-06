@@ -1,6 +1,5 @@
 using BusinessLayer.Interfaces;
 using BusinessLayer.Interfaces.Token;
-using BusinessLayer.Services;
 using BusinessLayer.Services.ApiServices;
 using BusinessLayer.Services.PasswordHash;
 using BusinessLayer.Services.TokenServices;
@@ -17,7 +16,6 @@ builder.Services.AddScoped<IPitchApiServices, PitchApiServices>();
 builder.Services.AddScoped<ICityApiServices, CityApiServices>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-builder.Services.AddScoped<IEmailServices, EmailServices>();
 
 var app = builder.Build();
 

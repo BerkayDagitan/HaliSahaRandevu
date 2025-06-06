@@ -69,11 +69,26 @@ namespace BusinessLayer.Services.ApiServices
 
         public async Task<bool> RegisterUserAsync(RegisterUserDTO dto)
         {
-            StringContent content = new StringContent(JsonConvert.SerializeObject(dto));
-            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-            var result = await _httpClient.PostAsync("User/register", content);
+            try
+            {
+                StringContent content = new StringContent(JsonConvert.SerializeObject(dto));
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                var result = await _httpClient.PostAsync("User/register", content);
 
-            return result.IsSuccessStatusCode;
+                if (!result.IsSuccessStatusCode)
+                {
+                    var errorContent = await result.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Kayıt hatası: {errorContent}");
+                    throw new Exception(errorContent);
+                }
+
+                return result.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Kayıt sırasında hata: {ex.Message}");
+                throw;
+            }
         }
     }
 }

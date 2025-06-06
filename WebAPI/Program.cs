@@ -1,6 +1,7 @@
 using BusinessLayer.Interfaces;
 using BusinessLayer.Interfaces.Token;
 using BusinessLayer.Services.ApiServices;
+using BusinessLayer.Services.EmailServices;
 using BusinessLayer.Services.PasswordHash;
 using BusinessLayer.Services.TokenServices;
 using DataAccessLayer.Context;
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IEmailServices, EmailServices>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

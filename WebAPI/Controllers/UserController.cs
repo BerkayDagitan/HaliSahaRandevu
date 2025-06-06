@@ -16,15 +16,13 @@ namespace WebAPI.Controllers
         private readonly IUserApiServices _services;
         private readonly ITokenService _tokenService;
         private readonly IPasswordHasher _passwordHasher;
-        private readonly IEmailServices _emailServices;
 
-        public UserController(IUserApiServices userApiServices, ProjectContext context, ITokenService tokenService, IPasswordHasher passwordHasher, IEmailServices emailServices)
+        public UserController(IUserApiServices userApiServices, ProjectContext context, ITokenService tokenService, IPasswordHasher passwordHasher)
         {
             _services = userApiServices;
             _db = context;
             _tokenService = tokenService;
             _passwordHasher = passwordHasher;
-            _emailServices = emailServices;
         }
 
         [HttpPost("register")]
@@ -67,14 +65,12 @@ namespace WebAPI.Controllers
                 var result = await _db.SaveChangesAsync();
                 if (result > 0)
                 {
-                    await _emailServices.SendWelcomeEmailAsync(dto.Email, dto.FirstName);
                     return Ok("Kayıt Başarılı");
                 }
                 else
                 {
                     return BadRequest("Kayıt Başarısız");
                 }
-                    
             }
             catch (Exception ex)
             {
