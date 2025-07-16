@@ -78,7 +78,6 @@ namespace BusinessLayer.Services.ApiServices
                 if (!result.IsSuccessStatusCode)
                 {
                     var errorContent = await result.Content.ReadAsStringAsync();
-                    Console.WriteLine($"Kayıt hatası: {errorContent}");
                     throw new Exception(errorContent);
                 }
 
@@ -86,8 +85,7 @@ namespace BusinessLayer.Services.ApiServices
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Kayıt sırasında hata: {ex.Message}");
-                throw;
+                throw new Exception(ex.Message);
             }
         }
     }

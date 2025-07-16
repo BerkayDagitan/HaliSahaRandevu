@@ -37,6 +37,12 @@ namespace DataAccessLayer.Context
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PitchId)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.UserName)
+                .IsUnique();
         }
     }
 }

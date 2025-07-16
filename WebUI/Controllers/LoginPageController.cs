@@ -60,7 +60,7 @@ namespace WebUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    TempData["ErrorRegister"] = $"Kayıt sırasında hata oluştu: {ex.Message}";
+                    TempData["ErrorRegister"] = ex.Message;
                 }
             }
             return View(dto);

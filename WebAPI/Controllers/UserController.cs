@@ -38,6 +38,11 @@ namespace WebAPI.Controllers
                 return BadRequest("Bu kullanıcı adı zaten kullanılıyor.");
             }
 
+            if (await _db.Users.AnyAsync(u => u.Email.ToLower().Trim() == dto.Email.ToLower().Trim()))
+            {
+                return BadRequest("Bu email adresi zaten kullanılıyor.");
+            }
+
             if (string.IsNullOrWhiteSpace(dto.Password) || dto.Password.Length < 10)
             {
                 return BadRequest("Şifre en az 10 karakter olmalı.");
