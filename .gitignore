@@ -363,12 +363,11 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Hassas bilgiler
+appsettings.json
 appsettings.Development.json
 appsettings.Production.json
-appsettings.Staging.json
-**/appsettings.*.json
-!appsettings.json
-!appsettings.Example.json
+WebAPI/appsettings.json
+WebUI/appsettings.json
 
 # E-posta ayarları
 **/EmailSettings.json
