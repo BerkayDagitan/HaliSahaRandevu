@@ -101,6 +101,13 @@ StyleCopReport.xml
 # Chutzpah Test files
 _Chutzpah*
 
+# Hassas bilgiler
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+WebAPI/appsettings.json
+WebUI/appsettings.json
+
 # Visual C++ cache files
 ipch/
 *.aps
@@ -361,13 +368,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-
-# Hassas bilgiler
-appsettings.json
-appsettings.Development.json
-appsettings.Production.json
-WebAPI/appsettings.json
-WebUI/appsettings.json
 
 # E-posta ayarları
 **/EmailSettings.json
