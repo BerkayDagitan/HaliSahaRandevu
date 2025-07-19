@@ -1,7 +1,6 @@
 using BusinessLayer.Interfaces;
 using BusinessLayer.Interfaces.Email;
 using BusinessLayer.Interfaces.Token;
-using BusinessLayer.Interfaces.WeatherInfo;
 using BusinessLayer.Services.ApiServices;
 using BusinessLayer.Services.EmailServices;
 using BusinessLayer.Services.PasswordHash;
@@ -14,7 +13,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IEmailServices, EmailServices>();
-builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
