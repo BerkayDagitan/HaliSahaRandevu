@@ -45,4 +45,3 @@ namespace DataAccessLayer.Context
                 .IsUnique();
         }
     }
-}
